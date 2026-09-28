@@ -91,22 +91,31 @@ if (btnLimpar) {
                 return;
             }
 
-            // Botão Igual (=)
+          // Botão Igual (=)
             if (texto === "=") {
                 try {
                     if (valorAtual !== "") {
                         const expressaoOriginal = valorAtual;
                         
-                        // Calcula e converte para texto
-                        const resultadoCalculado = String(Function(`"use strict"; return (${valorAtual})`)());
+                        // Executa o cálculo
+                        const resultadoNum = Function(`"use strict"; return (${valorAtual})`)();
 
-                        // Atualiza o visor imediatamente
+                        // Verifica se o resultado é infinito (ex: divisão por zero) ou inválido (NaN)
+                        if (!isFinite(resultadoNum)) {
+                            display.innerText = "Erro";
+                            valorAtual = "";
+                            return;
+                        }
+
+                        const resultadoCalculado = String(resultadoNum);
+
+                        // Atualiza o visor
                         display.innerText = resultadoCalculado;
                         
-                        // Envia para o banco PostgreSQL
+                        // Envia para o banco PostgreSQL apenas se for um número válido
                         salvarNoBanco(expressaoOriginal, resultadoCalculado);
 
-                        // Prepara o valorAtual com o resultado para a próxima conta
+                        // Prepara valorAtual para a próxima operação
                         valorAtual = resultadoCalculado;
                     }
                 } catch (e) {
@@ -115,7 +124,6 @@ if (btnLimpar) {
                 }
                 return;
             }
-
             // Tratamento para não acumular '0' no início ou sobresscrever após 'Erro'
             if ((textoDisplayAtual === "0" || textoDisplayAtual === "Erro") && !isNaN(texto)) {
                 valorAtual = texto;
