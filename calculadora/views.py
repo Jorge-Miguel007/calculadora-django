@@ -1,44 +1,38 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from .models import HistoricoCalculo
 
 def index(request):
-    resultado = None
-    erro = None
-    num1_input = ""
-    num2_input = ""
+    # Carrega todo o histórico ordenado pelo mais recente
+    historico = HistoricoCalculo.objects.all().order_by('-criado_em')
+    return render(request, 'calculadora/index.html', {'historico': historico})
 
-    if request.method == "POST":
-        # Captura os dados do formulário
-        num1_input = request.POST.get("num1", "")
-        num2_input = request.POST.get("num2", "")
-        operacao = request.POST.get("operacao")
-
+@csrf_exempt
+def salvar_calculo(request):
+    if request.method == 'POST':
         try:
-            num1 = float(num1_input)
-            num2 = float(num2_input)
+            dados = json.loads(request.body)
+            expressao = dados.get('expressao')
+            resultado = dados.get('resultado')
 
-            # Executa a operação matemática correspondente
-            if operacao == "soma":
-                resultado = num1 + num2
-            elif operacao == "subtracao":
-                resultado = num1 - num2
-            elif operacao == "multiplicacao":
-                resultado = num1 * num2
-            elif operacao == "divisao":
-                if num2 == 0:
-                    erro = "Divisão por 0 não é permitida"
-                else:
-                    resultado = num1 / num2
+            if expressao and resultado:
+                # Grava a conta diretamente no PostgreSQL
+                HistoricoCalculo.objects.create(
+                    expressao=expressao,
+                    resultado=resultado
+                )
+                return JsonResponse({'status': 'sucesso'})
+        except Exception as e:
+            return JsonResponse({'status': 'erro', 'message': str(e)}, status=400)
 
-            # : remove o .0 de números inteiros (ex: 10.0 vira 10)
-            if resultado is not None and isinstance(resultado, float) and resultado.is_integer():
-                resultado = int(resultado)
+    return JsonResponse({'status': 'erro', 'message': 'Método inválido'}, status=400)
 
-        except (ValueError, TypeError):
-            erro = "Insira números válidos"
-
-    return render(request, "calculadora/index.html", {
-        "resultado": resultado,
-        "erro": erro,
-        "num1": num1_input,
-        "num2": num2_input,
-    })
+@csrf_exempt
+def limpar_historico(request):
+    if request.method == 'POST':
+        # Apaga todo o histórico da tabela
+        HistoricoCalculo.objects.all().delete()
+        return JsonResponse({'status': 'sucesso'})
+    return JsonResponse({'status': 'erro'}, status=400)
