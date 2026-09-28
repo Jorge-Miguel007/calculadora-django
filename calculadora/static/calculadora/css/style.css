@@ -1,6 +1,28 @@
+/* Variáveis do Tema Claro (Padrão) */
+:root {
+    --bg-body: #f2f2f2;
+    --bg-calculadora: #ffffff;
+    --bg-display: #e0e0e0;
+    --color-display: #111111;
+    --bg-btn: #e0e0e0;
+    --color-btn: #000000;
+    --bg-btn-hover: #d0d0d0;
+}
+
+/* Variáveis do Tema Escuro */
+body.dark-theme {
+    --bg-body: #1a1a1a;
+    --bg-calculadora: #222222;
+    --bg-display: #111111;
+    --color-display: #ffffff;
+    --bg-btn: #333333;
+    --color-btn: #ffffff;
+    --bg-btn-hover: #444444;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+    background-color: var(--bg-body);
 
     display: flex;
     justify-content: center;
@@ -8,35 +30,57 @@ body {
 
     min-height: 100vh;
     margin: 0;
+    transition: background-color 0.3s ease;
 }
 
-.calculadora{
+.calculadora {
     width: 300px;
-    background-color: #222;
+    background-color: var(--bg-calculadora);
     padding: 22px;
     border-radius: 15px;
+    transition: background-color 0.3s ease;
 }
 
-.display{
-    background-color: #111;
-    color: white;
+/* Botão de Alternar Tema (Sol / Lua) */
+.btn-tema {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: var(--bg-btn);
+    color: var(--color-btn);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-tema:hover {
+    background-color: var(--bg-btn-hover);
+}
+
+.display {
+    background-color: var(--bg-display);
+    color: var(--color-display);
 
     font-size: 32px;
     text-align: right;
 
     padding: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 
     border-radius: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.botoes{
+.botoes {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 2fr);
     gap: 10px;
 }
 
-button{
+button {
     font-size: 22px;
     padding: 20px;
 
@@ -44,4 +88,11 @@ button{
     border-radius: 10px;
 
     cursor: pointer;
+    background-color: var(--bg-btn);
+    color: var(--color-btn);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--bg-btn-hover);
 }

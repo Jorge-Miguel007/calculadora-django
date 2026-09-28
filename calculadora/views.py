@@ -29,7 +29,7 @@ def index(request):
                 else:
                     resultado = num1 / num2
 
-            # Formatação opcional: remove o .0 de números inteiros (ex: 10.0 vira 10)
+            # : remove o .0 de números inteiros (ex: 10.0 vira 10)
             if resultado is not None and isinstance(resultado, float) and resultado.is_integer():
                 resultado = int(resultado)
 

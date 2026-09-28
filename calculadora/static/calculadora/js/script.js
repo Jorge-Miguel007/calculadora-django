@@ -1,7 +1,28 @@
 document.addEventListener("DOMContentLoaded", function() {
     const botoes = document.querySelectorAll(".numero");
     const display = document.getElementById("display");
+    const btnTema = document.getElementById("toggle-theme");
 
+    // --- Lógica de Troca de Tema (Claro/Escuro) ---
+    if (btnTema) {
+        const temaSalvo = localStorage.getItem("tema");
+        if (temaSalvo === "dark") {
+            document.body.classList.add("dark-theme");
+        }
+
+        btnTema.addEventListener("click", function() {
+            document.body.classList.toggle("dark-theme");
+            if (document.body.classList.contains("dark-theme")) {
+                btnTema.innerText = "💡 Modo Claro";
+                localStorage.setItem("tema", "dark");
+            } else {
+                btnTema.innerText = "🔌 Modo Escuro";
+                localStorage.setItem("tema", "light");
+            }
+        });
+    }
+
+    // --- Lógica da Calculadora ---
     let valorAtual = "";
 
     botoes.forEach(function(botao) {
@@ -24,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         display.innerText = valorAtual;
                     }
                 } catch (e) {
-                    display.innerText = "erro,";
+                    display.innerText = "Erro"; // Padronizado para "Erro"
                     valorAtual = "";
                 }
                 return;
