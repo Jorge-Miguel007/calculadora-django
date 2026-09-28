@@ -3,15 +3,23 @@ document.addEventListener("DOMContentLoaded", function() {
     const display = document.getElementById("display");
     const btnTema = document.getElementById("toggle-theme");
 
-    // --- Lógica de Troca de Tema (Claro/Escuro) ---
+    // --- Troca de Tema (Claro/Escuro) ---
     if (btnTema) {
         const temaSalvo = localStorage.getItem("tema");
+
+        // Sincroniza a classe do body e o texto do botão com o que está no localStorage
         if (temaSalvo === "dark") {
             document.body.classList.add("dark-theme");
+            btnTema.innerText = "💡 Modo Claro";
+        } else {
+            // Se for 'light' ou se for a PRIMEIRA vez abrindo o site (temaSalvo === null)
+            document.body.classList.remove("dark-theme");
+            btnTema.innerText = "🔌 Modo Escuro";
         }
 
         btnTema.addEventListener("click", function() {
             document.body.classList.toggle("dark-theme");
+
             if (document.body.classList.contains("dark-theme")) {
                 btnTema.innerText = "💡 Modo Claro";
                 localStorage.setItem("tema", "dark");
@@ -30,14 +38,12 @@ document.addEventListener("DOMContentLoaded", function() {
             const texto = botao.innerText.trim();
             const textoDisplayAtual = display.innerText.trim();
 
-            // Botão Limpar (C)
             if (texto === "C") {
                 valorAtual = "";
                 display.innerText = "0";
                 return;
             }
 
-            // Botão Igual (=)
             if (texto === "=") {
                 try {
                     if (valorAtual !== "") {
@@ -45,20 +51,18 @@ document.addEventListener("DOMContentLoaded", function() {
                         display.innerText = valorAtual;
                     }
                 } catch (e) {
-                    display.innerText = "Erro"; // Padronizado para "Erro"
+                    display.innerText = "Erro";
                     valorAtual = "";
                 }
                 return;
             }
 
-            // Se o visor estiver com "0" ou "Erro", substitui pelo novo número digitado
             if ((textoDisplayAtual === "0" || textoDisplayAtual === "Erro") && !isNaN(texto)) {
                 valorAtual = texto;
             } else {
                 valorAtual += texto;
             }
 
-            // Atualiza o texto visível na barra da calculadora
             display.innerText = valorAtual;
         });
     });
