@@ -1,44 +1,60 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <title>Calculadora</title>
-        <link rel="stylesheet" href="{% static 'calculadora/css/style.css' %}">
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Django</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'calculadora/css/style.css' %}">
+</head>
+<body>
 
-        <div class="calculadora">
-            <!--botao para alterar o tema-->
-            <button type="button" id="toggle-theme" class="btn-tema">🔌 Modo Escuro</button>
-            <div class="display" id="display">0</div>
+    <button id="toggle-theme">🔌 Modo Escuro</button>
 
-            <div class="botoes">
-                <button type="button" class="numero">C</button>
-                <button type="button" class="numero">/</button>
-                <button type="button" class="numero">*</button>
-                <button type="button" class="numero">-</button>
+    <div class="calculadora">
+        <div id="display">0</div>
+        <div class="botoes">
+            <button class="numero">C</button>
+            <button class="numero">/</button>
+            <button class="numero">*</button>
+            <button class="numero">-</button>
 
-                <button type="button" class="numero" id="botao7">7</button>
-                <button type="button" class="numero">8</button>
-                <button type="button" class="numero">9</button>
-                <button type="button" class="numero">+</button>
+            <button class="numero">7</button>
+            <button class="numero">8</button>
+            <button class="numero">9</button>
+            <button class="numero">+</button>
 
-                <button type="button" class="numero">4</button>
-                <button type="button" class="numero">5</button>
-                <button type="button" class="numero">6</button>
-                <button type="button" class="numero">.</button>
+            <button class="numero">4</button>
+            <button class="numero">5</button>
+            <button class="numero">6</button>
+            <button class="numero">=</button>
 
-                <button type="button" class="numero">1</button>
-                <button type="button" class="numero">2</button>
-                <button type="button" class="numero">3</button>
-                <button type="button" class="numero">=</button>
-
-                <button type="button" class="numero">0</button>
-            </div>
+            <button class="numero">1</button>
+            <button class="numero">2</button>
+            <button class="numero">3</button>
+            <button class="numero">0</button>
         </div>
+    </div>
 
-        <script src="{% static 'calculadora/js/script.js' %}"></script>
-    </body>
+    <!-- SECÇÃO DO HISTÓRICO COM O BOTÃO -->
+    <div class="historico-container">
+        <h2>Histórico de Cálculos</h2>
+
+        <!-- Botão para limpar histórico -->
+        <button id="btn-limpar-historico">Limpar Histórico</button>
+
+        <ul class="historico-lista">
+            {% for item in historico %}
+                <li>
+                    <strong>{{ item.expressao }} = {{ item.resultado }}</strong>
+                    <small>({{ item.criado_em|date:"d/m/Y H:i" }})</small>
+                </li>
+            {% empty %}
+                <li>Nenhum cálculo efetuado ainda.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script src="{% static 'calculadora/js/script.js' %}"></script>
+</body>
 </html>

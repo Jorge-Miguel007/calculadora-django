@@ -3,6 +3,27 @@ document.addEventListener("DOMContentLoaded", function() {
     const display = document.getElementById("display");
     const btnTema = document.getElementById("toggle-theme");
 
+    const btnLimpar = document.getElementById("btn-limpar-historico");
+
+if (btnLimpar) {
+    btnLimpar.addEventListener("click", function() {
+        fetch('/limpar-historico/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'sucesso') {
+                // Opção 1: Recarrega a página para atualizar a lista limpa
+                window.location.reload();
+            }
+        })
+        .catch(error => console.error('Erro ao limpar histórico:', error));
+    });
+}
+
     // Função responsável por enviar os dados para o Django e atualizar a tela
     function salvarNoBanco(expressao, resultado) {
         fetch('/salvar-calculo/', {

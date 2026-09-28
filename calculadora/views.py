@@ -4,6 +4,14 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import HistoricoCalculo
 
+@csrf_exempt
+def limpar_historico(request):
+    if request.method == 'POST':
+        # Apaga todos os registos do banco PostgreSQL
+        HistoricoCalculo.objects.all().delete()
+        return JsonResponse({'status': 'sucesso'})
+    return JsonResponse({'status': 'erro'}, status=400)
+
 def index(request):
     # Carrega todo o histórico ordenado pelo mais recente
     historico = HistoricoCalculo.objects.all().order_by('-criado_em')
